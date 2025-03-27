@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Weather App
+Este é um aplicativo de clima desenvolvido com Next.js e TypeScript, que exibe informações meteorológicas baseadas na localização do usuário (caso seja permitido) e para diversas cidades. O projeto conta com animações simples, background interativo de acordo com o clima, skeleton para loading, integração com a API WeatherAPI e cobertura total de testes unitários.
 
-## Getting Started
+Funcionalidades
+Clima do Usuário: Exibe o clima atual com base na localização (caso a permissão seja concedida).
 
-First, run the development server:
+Clima para Diversas Cidades: Permite consultar informações meteorológicas de várias cidades.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Animações Simples: Transições e efeitos para melhorar a experiência do usuário.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Background Interativo: Imagens de fundo que se adaptam conforme as condições climáticas.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Skeleton para Loading: Exibe placeholders enquanto os dados são carregados.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Integração com WeatherAPI: Consome dados da API para exibição do clima.
 
-## Learn More
+Componentização: Estrutura de componentes modular e reutilizável.
 
-To learn more about Next.js, take a look at the following resources:
+Cobertura de Testes 100%: Testes unitários completos utilizando Jest e React Testing Library.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Tecnologias Utilizadas
+Next.js: Framework React para renderização no servidor e rotas.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+TypeScript: Linguagem com tipagem estática para maior robustez.
 
-## Deploy on Vercel
+React Query: Gerenciamento de estado de dados e cache.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Chakra UI: Biblioteca de componentes para construção de interfaces.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Jest & React Testing Library: Frameworks para testes unitários.
+
+Como Rodar o Projeto
+Pré-requisitos
+Node.js: Versão 14 ou superior.
+
+npm ou yarn: Gerenciador de pacotes.
