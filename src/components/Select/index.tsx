@@ -20,8 +20,8 @@ export const SelectComponent = ({
         onChange={onChange}
         className="custom-select"
       >
-        {availableCities.map((cityOption) => (
-          <option key={cityOption} value={cityOption}>
+        {availableCities.map((cityOption, index) => (
+          <option key={`${cityOption}-${index}`} value={cityOption}>
             {cityOption}
           </option>
         ))}

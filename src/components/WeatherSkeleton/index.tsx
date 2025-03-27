@@ -8,7 +8,7 @@ import {
   HStack,
 } from "@chakra-ui/react";
 import { BiLocationPlus } from "react-icons/bi";
-import { weatherTranslations } from "@/app/utils/enuns";
+import { weatherImagen, weatherTranslations } from "@/utils/enuns";
 
 export default function WeatherSkeleton({ condition }: { condition: string }) {
   return (
@@ -17,7 +17,7 @@ export default function WeatherSkeleton({ condition }: { condition: string }) {
       direction="column"
       height="100vh"
       backgroundColor="#00BFFF"
-      backgroundImage={`url('../assets/${weatherTranslations[condition]}.png')`}
+      backgroundImage={`url('../assets/${weatherImagen[condition]}.png')`}
       backgroundSize="cover"
       backgroundPosition="center"
       backgroundRepeat="no-repeat"

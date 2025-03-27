@@ -85,3 +85,18 @@ export const weatherTranslations: { [key: string]: string } = {
   "Patchy light snow with thunder": "Neve fraca isolada com trovões",
   "Moderate or heavy snow with thunder": "Neve moderada ou forte com trovões",
 };
+
+export const weatherImagen: { [key: string]: string } = {
+  Clear: "Céu limpo",
+  Sunny: "Ensolarado",
+  "Partly cloudy": "Parcialmente nublado",
+  Cloudy: "Nublado",
+  Overcast: "Encoberto",
+  Mist: "Névoa",
+  "Patchy rain possible": "Possibilidade de chuva isolada",
+  "Thundery outbreaks possible": "Possibilidade de tempestades",
+  "Patchy light rain": "Chuva fraca isolada",
+  Fog: "Nevoeiro",
+  "Light rain shower": "Pancada de chuva fraca",
+  "Moderate or heavy rain with thunder": "Chuva moderada ou forte com trovões",
+};

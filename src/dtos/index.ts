@@ -1,7 +1,7 @@
-export interface QueryError {
+export interface IQueryError {
   message: string;
 }
-export interface WeatherForecast {
+export interface IWeatherForecast {
   date: string;
   day: {
     condition: {
@@ -18,19 +18,19 @@ export interface WeatherForecast {
   };
 }
 
-export interface Condition {
+export interface ICondition {
   text: string;
   icon: string;
   code: number;
 }
 
-export interface CurrentWeather {
+export interface ICurrentWeather {
   last_updated_epoch: number;
   last_updated: string;
   temp_c: number;
   temp_f: number;
   is_day: number;
-  condition: Condition;
+  condition: ICondition;
   wind_mph: number;
   wind_kph: number;
   wind_degree: number;
@@ -55,14 +55,14 @@ export interface CurrentWeather {
   gust_mph: number;
   gust_kph: number;
 }
-export interface WeatherData {
+export interface IWeatherData {
   location: {
     name: string;
     region: string;
     tz_id: string;
   };
-  current: CurrentWeather;
+  current: ICurrentWeather;
   forecast: {
-    forecastday: WeatherForecast[];
+    forecastday: IWeatherForecast[];
   };
 }

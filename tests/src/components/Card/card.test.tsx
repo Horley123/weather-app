@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { Card } from "./index";
+import { Card } from "../../../../src/components/Card/index";
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 
 describe("Card component", () => {

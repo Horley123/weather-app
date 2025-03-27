@@ -1,8 +1,8 @@
-import { fetchWeather, getCurrentUserWeather, getUserCity } from './requests';
-import api from './api';
+import { fetchWeather, getCurrentUserWeather, getUserCity } from '../../../src/services/requests';
+import api from '../../../src/services/api';
 
 
-jest.mock('./api');
+jest.mock('../../../src/services/api');
 
 
 global.navigator.geolocation = {

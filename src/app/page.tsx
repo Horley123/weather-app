@@ -2,33 +2,34 @@
 import React, { useEffect, useState } from "react";
 import { Flex, Text, Icon } from "@chakra-ui/react";
 import { BiLocationPlus } from "react-icons/bi";
-import { Card } from "./components/Card";
+import { Card } from "../components/Card";
 import {
   formatDateWithTimezone,
   formatDayAbbr,
   formatTimeWithTimezone,
-} from "./utils/date";
-import { WeatherData, WeatherForecast, QueryError } from "./dtos";
+} from "../utils/date";
+import { IWeatherData, IWeatherForecast, IQueryError } from "../dtos";
 import { useQuery } from "@tanstack/react-query";
-import { fetchWeather, getUserCity } from "./services/requests";
-import WeatherSkeleton from "./components/WeatherSkeleton";
-import { CITIES_ENUM, weatherTranslations } from "./utils/enuns";
-import { SelectComponent } from "./components/Select";
+import { fetchWeather, getUserCity } from "../services/requests";
+import WeatherSkeleton from "../components/WeatherSkeleton";
+import { CITIES_ENUM, weatherTranslations } from "../utils/enuns";
+import { SelectComponent } from "../components/Select";
 
 export default function Home() {
   const [city, setCity] = useState<string>("Belo Horizonte");
   const [availableCities, setAvailableCities] = useState<string[]>([]);
-  const { data, isLoading, error, refetch } = useQuery<WeatherData, QueryError>(
-    {
-      queryKey: ["weather", city],
-      queryFn: () => fetchWeather(city),
-      staleTime: 1000 * 60 * 5,
-    }
-  );
+  const { data, isLoading, error, refetch } = useQuery<
+    IWeatherData,
+    IQueryError
+  >({
+    queryKey: ["weather", city],
+    queryFn: () => fetchWeather(city),
+    staleTime: 1000 * 60 * 5,
+  });
 
   const { data: cityData, isLoading: cityIsLoading } = useQuery<
-    Omit<WeatherData, "forecast">,
-    QueryError
+    Omit<IWeatherData, "forecast">,
+    IQueryError
   >({
     queryKey: ["weather"],
     queryFn: getUserCity,
@@ -61,7 +62,7 @@ export default function Home() {
   if (isLoading || cityIsLoading)
     return <WeatherSkeleton condition={data?.current.condition.text!} />;
   if (error)
-    return <p>Erro ao buscar os dados: {(error as QueryError).message}</p>;
+    return <p>Erro ao buscar os dados: {(error as IQueryError).message}</p>;
 
   return (
     <Flex
@@ -146,7 +147,7 @@ export default function Home() {
           height={"50%"}
           paddingBottom={"40px"}
         >
-          {data?.forecast.forecastday.map((day: WeatherForecast) => (
+          {data?.forecast.forecastday.map((day: IWeatherForecast) => (
             <Card
               key={day.date}
               dia={formatDayAbbr(day.date)}

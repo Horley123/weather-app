@@ -1,4 +1,4 @@
-import { WeatherData } from "../dtos";
+import { IWeatherData } from "../dtos";
 import api from "./api";
 
 export const fetchWeather = async (city: string) => {
@@ -11,14 +11,14 @@ export const fetchWeather = async (city: string) => {
 export const getCurrentUserWeather = async (
   latitude: number,
   longitude: number
-): Promise<Omit<WeatherData, "forecastday">> => {
+): Promise<Omit<IWeatherData, "forecastday">> => {
   const response = await api.get(`current.json?q=${latitude},${longitude}`);
 
   return response.data;
 };
 
 export const getUserCity = async () => {
-  return new Promise<Omit<WeatherData, "forecastday">>((resolve, reject) => {
+  return new Promise<Omit<IWeatherData, "forecastday">>((resolve, reject) => {
     if (!navigator.geolocation) {
       reject("Geolocalização não suportada.");
     }

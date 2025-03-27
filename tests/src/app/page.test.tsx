@@ -1,11 +1,13 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import Home from "./page";
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { fetchWeather, getUserCity } from "./services/requests";
+
 import "@testing-library/jest-dom";
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
+import { fetchWeather, getUserCity } from "@/services/requests";
+import Home from "../../../src/app/page";
 
-jest.mock("./services/requests");
+jest.mock("../../../src/services/requests");
 
 const mockWeatherData = {
   location: { name: "Belo Horizonte" },
@@ -68,8 +70,12 @@ describe("Home Component", () => {
     });
 
     const select = await waitFor(() => screen.getByRole("combobox"));
+
     fireEvent.change(select, { target: { value: "São Paulo" } });
-    await waitFor(() => expect(select).toHaveValue("São Paulo"));
+
+    await waitFor(() => {
+      expect(select).toHaveValue("São Paulo");
+    });
   });
 
   it("should set available cities correctly when geolocation permission is denied", async () => {
@@ -88,5 +94,8 @@ describe("Home Component", () => {
         </ChakraProvider>
       </QueryClientProvider>
     );
+    await waitFor(() => {
+      expect(screen.getByRole("combobox")).toBeInTheDocument();
+    });
   });
 });
