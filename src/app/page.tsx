@@ -1,95 +1,171 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+import React, { useEffect, useState } from "react";
+import { Flex, Text, Icon } from "@chakra-ui/react";
+import { BiLocationPlus } from "react-icons/bi";
+import { Card } from "./components/Card";
+import {
+  formatDateWithTimezone,
+  formatDayAbbr,
+  formatTimeWithTimezone,
+} from "./utils/date";
+import { WeatherData, WeatherForecast, QueryError } from "./dtos";
+import { useQuery } from "@tanstack/react-query";
+import { fetchWeather, getUserCity } from "./services/requests";
+import WeatherSkeleton from "./components/WeatherSkeleton";
+import { CITIES_ENUM, weatherTranslations } from "./utils/enuns";
+import { SelectComponent } from "./components/Select";
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [city, setCity] = useState<string>("Belo Horizonte");
+  const [availableCities, setAvailableCities] = useState<string[]>([]);
+  const { data, isLoading, error, refetch } = useQuery<WeatherData, QueryError>(
+    {
+      queryKey: ["weather", city],
+      queryFn: () => fetchWeather(city),
+      staleTime: 1000 * 60 * 5,
+    }
+  );
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  const {
+    data: cityData,
+    isLoading: cityIsLoading,
+    error: cityError,
+  } = useQuery<Omit<WeatherData, "forecast">, QueryError>({
+    queryKey: ["weather"],
+    queryFn: getUserCity,
+    staleTime: 1000 * 60 * 5,
+  });
+
+  useEffect(() => {
+    navigator.permissions.query({ name: "geolocation" }).then((result) => {
+      if (result.state === "granted") {
+        if (cityData) {
+          setCity(cityData.location.name);
+          setAvailableCities((prevCities) => [
+            cityData.location.name,
+            ...CITIES_ENUM,
+          ]);
+
+          refetch();
+        }
+      } else if (result.state === "denied") {
+        setAvailableCities((prevCities) => [...CITIES_ENUM]);
+        refetch();
+      }
+    });
+  }, [cityData]);
+
+  const handleCityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setCity(event.target.value);
+  };
+
+  if (isLoading || cityIsLoading)
+    return <WeatherSkeleton condition={data?.current.condition.text!} />;
+  if (error)
+    return <p>Erro ao buscar os dados: {(error as QueryError).message}</p>;
+
+  return (
+    <Flex
+      flex={1}
+      direction="column"
+      height="100vh"
+      backgroundColor="#00BFFF"
+      backgroundImage={`url('./assets/${
+        weatherTranslations[data?.current.condition.text!]
+      }.png')`}
+      backgroundSize="cover"
+      backgroundPosition="center"
+      backgroundRepeat="no-repeat"
+      transition="background-image 0.5s ease-in-out"
+    >
+      <Flex
+        justifyContent="flex-end"
+        w={"100%"}
+        padding="20px 20px"
+        gap={3}
+        alignItems={"center"}
+      >
+        <SelectComponent
+          availableCities={availableCities}
+          onChange={handleCityChange}
+          defaultValue={city}
+        />
+      </Flex>
+      <Flex flex={1} direction="column">
+        <>
+          <Flex
+            justifyContent="space-between"
+            flex={1}
+            direction="row"
+            padding="0px 80px"
+            flexWrap={"wrap"}
+            alignItems={"center"}
+            gap={20}
           >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+            <Flex
+              justifyContent="center"
+              direction="column"
+              fontSize="25px"
+              textAlign="center"
+            >
+              <Flex direction="row" alignItems="center" justifyContent="center">
+                <Icon>
+                  <BiLocationPlus color={"white"} />
+                </Icon>
+                <Text fontSize="20px">{city}</Text>
+              </Flex>
+
+              <Text fontSize="30px">
+                {formatDateWithTimezone(data?.location.tz_id!)}
+              </Text>
+              <Text fontSize="70px">
+                {formatTimeWithTimezone(data?.location.tz_id!)}
+              </Text>
+
+              <Text fontSize="20px">
+                {weatherTranslations[data?.current.condition.text!]}
+              </Text>
+            </Flex>
+
+            <Flex
+              justifyContent="center"
+              direction="column"
+              fontSize="25px"
+              textAlign="center"
+              fontWeight={"bold"}
+            >
+              <Text>PRESSÃO: {data?.current.pressure_mb} hPa</Text>
+              <Text>UMIDADE: {data?.current.humidity} %</Text>
+              <Text>VELOCIDADE DO VENTO: {data?.current.wind_kph} KM/H</Text>
+
+              <Text fontSize="60px">{data?.current.temp_c} °C</Text>
+            </Flex>
+          </Flex>
+        </>
+
+        <Flex
+          flex={1}
+          width="auto"
+          gap={5}
+          overflowX="auto"
+          padding="10px"
+          direction="row"
+          wrap="nowrap"
+          alignItems="flex-end"
+          paddingBottom="40px"
+          paddingLeft="40px"
+        >
+          {data?.forecast.forecastday.map((day: WeatherForecast) => (
+            <Card
+              key={day.date}
+              dia={formatDayAbbr(day.date)}
+              img_src={day.day.condition.icon}
+              max_temp={day.day.maxtemp_c}
+              min_temp={day.day.mintemp_c}
             />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          ))}
+        </Flex>
+      </Flex>
+    </Flex>
   );
 }
