@@ -24,14 +24,13 @@ export default function WeatherSkeleton({ condition }: { condition: string }) {
       transition="background-image 0.5s ease-in-out"
     >
       <Flex
-        justifyContent="space-between"
+        justifyContent="flex-end"
         alignItems="center"
         width="100%"
         gap={3}
         padding="20px"
       >
         <Skeleton height="40px" width="150px" borderRadius="5px" />
-        <Skeleton height="40px" width="40px" borderRadius="50%" />
       </Flex>
 
       <Flex

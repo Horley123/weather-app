@@ -26,11 +26,10 @@ export default function Home() {
     }
   );
 
-  const {
-    data: cityData,
-    isLoading: cityIsLoading,
-    error: cityError,
-  } = useQuery<Omit<WeatherData, "forecast">, QueryError>({
+  const { data: cityData, isLoading: cityIsLoading } = useQuery<
+    Omit<WeatherData, "forecast">,
+    QueryError
+  >({
     queryKey: ["weather"],
     queryFn: getUserCity,
     staleTime: 1000 * 60 * 5,
@@ -78,13 +77,7 @@ export default function Home() {
       backgroundRepeat="no-repeat"
       transition="background-image 0.5s ease-in-out"
     >
-      <Flex
-        justifyContent="flex-end"
-        w={"100%"}
-        padding="20px 20px"
-        gap={3}
-        alignItems={"center"}
-      >
+      <Flex justifyContent="flex-end" w={"100%"} padding="20px 20px" gap={3}>
         <SelectComponent
           availableCities={availableCities}
           onChange={handleCityChange}
@@ -144,16 +137,14 @@ export default function Home() {
         </>
 
         <Flex
-          flex={1}
-          width="auto"
           gap={5}
           overflowX="auto"
-          padding="10px"
           direction="row"
           wrap="nowrap"
           alignItems="flex-end"
-          paddingBottom="40px"
           paddingLeft="40px"
+          height={"50%"}
+          paddingBottom={"40px"}
         >
           {data?.forecast.forecastday.map((day: WeatherForecast) => (
             <Card

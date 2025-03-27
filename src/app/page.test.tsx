@@ -1,16 +1,9 @@
-import {
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-  act,
-} from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import Home from "./page";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { fetchWeather, getUserCity } from "./services/requests";
 import "@testing-library/jest-dom";
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
-import { SelectComponent } from "./components/Select";
 
 jest.mock("./services/requests");
 
